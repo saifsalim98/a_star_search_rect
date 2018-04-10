@@ -115,26 +115,37 @@ function draw() {
 
     // slow down the iteration of draw() to 1 iteration per second 
     frameRate(1);
+    // loop until the openSet queue contains no element
     if (openSet.length > 0) {
         
+        // initialize the first element of openSet queue as winner
         var winner = 0;
+        
+        // compare the fScore of all the elements of openSet and assign winner to the element having least fScore
         for ( var i = 0; i < openSet.length; i++) {
             if (openSet[i].f < openSet[winner].f)
                 winner = i;
         }
         
-        var current = openSet[winner];
+        // declare the winner element as present 
+        var present = openSet[winner];
         
-        if ( current === end) {
+        // if present is equal to end element then stop looping the draw() and show the length of the path in the console
+        if ( present === end) {
             noLoop();
             console.log(path.length+1);
             console.log('Done');
         }
         
-        removeFromSet(openSet, current);
-        closedSet.push(current);
+        // remove the present element from openSet(discovered) and push it to closedSet(evaluated)
+        removeFromSet(openSet, present);
+        closedSet.push(present);
         
-        var neighbours = current.neighbours;
+        // declare the neighbours of present elements as neighbours
+        var neighbours = present.neighbours;
+        
+        // loop through all the neighbours and calculate their gScore, heuristics and hence the hScore
+        // also push the neighbour into openSet which has just been discovered 
         for (var i = 0; i < neighbours.length ; i++) {
             
             var neighbour = neighbours[i];
@@ -161,30 +172,35 @@ function draw() {
         
     }
     
+    // openSet queue is empty and the last evaluated element is not end element
     else {
         console.log('No solution');
         noSolution = true;
         noLoop();
     }
-
+    
+    // start with a black background of the canvas
     background(0);
-
+    
+    // paint all the elements as White
     for (var i = 0; i < cols; i++) {
         for (var j = 0; j < rows; j++) {
             grid[i][j].show(color(255));
         }
     }
     
+    // paint all the elements of the closedSet as Red
     for (var i = 0 ; i < closedSet.length; i++) {
         closedSet[i].show(color(255,0,0));
     }
 
-
-    
+    // paint all the elements of the openSet as Green
     for (var i = 0 ; i < openSet.length; i++) {
         openSet[i].show(color(0,255,0));
     }
     
+    // while noSolution == True, means until it has been declared that there is no solution, draw the path from the
+    // last evaluated element to the start element
     if (!noSolution) {
         path = [];
         var temp = current;
@@ -195,7 +211,7 @@ function draw() {
         } 
     }
     
-   
+    // paint all the elements of the path as Blue
     for (var i = 0; i < path.length; i++) {
         path[i].show(color(0,0,255)); 
     }
