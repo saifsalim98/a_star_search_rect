@@ -151,7 +151,7 @@ function draw() {
             var neighbour = neighbours[i];
             
             if (!closedSet.includes(neighbour) && !neighbour.wall) {
-            var tempG = current.g + 1;
+            var tempG = present.g + 1;
             
                 if (openSet.includes(neighbour)) {
                     if (tempG < neighbour.g) {
@@ -163,7 +163,7 @@ function draw() {
                 }    
                 neighbour.h = heuristic(neighbour,end);
                 neighbour.f = neighbour.g + neighbour.h;
-                neighbour.previous = current;
+                neighbour.previous = present;
             }
         }
             
@@ -203,7 +203,7 @@ function draw() {
     // last evaluated element to the start element
     if (!noSolution) {
         path = [];
-        var temp = current;
+        var temp = present;
         path.push(temp);
         while (temp.previous) {
             path.push(temp.previous);
